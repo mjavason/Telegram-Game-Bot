@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { Bot } from 'grammy';
 import 'express-async-errors';
 import cors from 'cors';
 import axios from 'axios';
@@ -15,7 +16,45 @@ dotenv.config({ path: './.env' });
 //#region keys and configs
 const PORT = process.env.PORT || 3000;
 const baseURL = 'https://httpbin.org';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'xxxx';
+// const SITE_LINK = process.env.SITE_LINK || 'xxxx';
+const bot = new Bot(TELEGRAM_BOT_TOKEN);
 //#endregion
+
+// const getUsername = (ctx: Context): string => {
+// 	return ctx?.me?.username || "";
+// };
+
+// const getInfo = (ctx: Context): Context["me"] => {
+// 	return ctx?.me || {};
+// };
+
+function telegramWelcomeCommand(bot: Bot) {
+  bot.command('start', (ctx) => {
+    ctx.replyWithChatAction('typing');
+
+    setTimeout(() => {
+      // const message = `Hello, welcome, our bot is live. This is the API URL: ${SITE_LINK}`;
+
+      // console.log(ctx.from);
+      // ctx.reply(message);
+      ctx.replyWithGame('fastfinger');
+      console.log(ctx.from);
+    }, 5000); // Adjust the timeout duration as needed
+  });
+
+  bot.on('callback_query:game_short_name', async (ctx) => {
+    console.log('Game event button called');
+    await ctx.answerCallbackQuery({ url: 'https://google.com' });
+  });
+}
+
+async function startBot() {
+  console.log('Telegram game bot started!');
+  telegramWelcomeCommand(bot);
+
+  bot.start();
+}
 
 //#region Server setup
 
@@ -36,6 +75,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+  startBot();
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
