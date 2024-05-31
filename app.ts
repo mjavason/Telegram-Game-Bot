@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { Bot } from 'grammy';
+import { Bot, GrammyError, HttpError } from 'grammy';
 import 'express-async-errors';
 import cors from 'cors';
 import axios from 'axios';
@@ -46,6 +46,19 @@ function telegramWelcomeCommand(bot: Bot) {
   bot.on('callback_query:game_short_name', async (ctx) => {
     console.log('Game event button called');
     await ctx.answerCallbackQuery({ url: 'https://google.com' });
+  });
+
+  bot.catch((err) => {
+    const ctx = err.ctx;
+    console.error(`Error while handling update ${ctx.update.update_id}:`);
+    const e = err.error;
+    if (e instanceof GrammyError) {
+      console.error("Error in request:", e.description);
+    } else if (e instanceof HttpError) {
+      console.error("Could not contact Telegram:", e);
+    } else {
+      console.error("Unknown error:", e);
+    }
   });
 }
 
