@@ -45,6 +45,8 @@ function telegramWelcomeCommand(bot: Bot) {
 
   bot.on('callback_query:game_short_name', async (ctx) => {
     console.log('Game event button called');
+    
+    // https://telegram-game-bot-frontend.onrender.com
     await ctx.answerCallbackQuery({ url: 'https://google.com' });
   });
 
