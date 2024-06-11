@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flash Thumb Bot Coming Soon!</title>
+  </head>
+  <body style="text-align: center">
+    <h1>Flash Thumb Bot Coming Soon</h1>
+    <p>
+      Game is still in development, we shall notify registered users once it's
+      ready.
+    </p>
+    <br />
+    <br />
+    <hr />
+    <ol
+      id="leaderboard-list"
+      style="width: fit-content; display: inline-block;"
+    ></ol>
+    <script>
+      const leaderboardList = document.getElementById('leaderboard-list');
+
+      // Replace 'YOUR_API_URL' with the actual URL of your API endpoint
+      fetch('http://localhost:5000/leaderboard')
+        .then((response) => response.json())
+        .then((data) => {
+          // Clear any existing list items
+          leaderboardList.innerHTML = '';
+
+          // Loop through the data and create list items
+          data.forEach((player) => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<b><span class="user">${player.username}</span></b> | <span class="score">${player.clicks}</span> clicks`;
+            leaderboardList.appendChild(listItem);
+          });
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          // Handle error gracefully, e.g., display an error message to the user
+        });
+    </script>
+  </body>
+</html>

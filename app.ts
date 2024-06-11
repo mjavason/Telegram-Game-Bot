@@ -19,6 +19,7 @@ const baseURL = 'https://httpbin.org';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'xxxx';
 // const SITE_LINK = process.env.SITE_LINK || 'xxxx';
 const bot = new Bot(TELEGRAM_BOT_TOKEN);
+let leaderboard: [{ username: string; clicks: number }] | any = [];
 //#endregion
 
 // const getUsername = (ctx: Context): string => {
@@ -43,7 +44,7 @@ function telegramWelcomeCommand(bot: Bot) {
     console.log('Game event button called');
 
     await ctx.answerCallbackQuery({
-      url: 'https://telegram-game-bot-frontend.onrender.com',
+      url: `https://telegram-game-bot-frontend.onrender.com?username=${ctx.from.username}`,
     });
   });
 
@@ -68,6 +69,41 @@ async function startBot() {
   bot.start();
 }
 
+//get complete top 10 leaderboard
+app.get('/leaderboard', (req: Request, res: Response) => {
+  return res.send(sortLeaderboard());
+});
+
+app.post('/new-score', (req: Request, res: Response) => {
+  console.log('req.body', req.body);
+  for (let i = 0; i < leaderboard.length; i++) {
+    if (leaderboard[i].username == req.body.username) {
+      if (leaderboard[i].clicks < req.body.clicks) leaderboard[i] = req.body;
+      return res.send({
+        success: true,
+        message: 'Score updated successfully',
+        data: leaderboard[i],
+      });
+    }
+  }
+
+  leaderboard.push(req.body);
+  return res.send({
+    success: true,
+    message: 'Score updated successfully',
+    data: req.body,
+  });
+});
+
+function sortLeaderboard() {
+  // Sort function for descending order
+  const sortByClicks = (a: { clicks: number }, b: { clicks: number }) =>
+    b.clicks - a.clicks;
+
+  // Sort the players array by score
+  const sortedPlayers = leaderboard.sort(sortByClicks);
+  return sortedPlayers;
+}
 //#region Server setup
 
 // default message

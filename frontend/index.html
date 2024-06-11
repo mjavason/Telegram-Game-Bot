@@ -3,14 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coming Soon!</title>
-    <!-- <script src="https://telegram.org/js/telegram-web-app.js"></script> -->
+    <title>Flash Thumb Challenge!</title>
+    <style>
+      .round {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%; /* Creates a circle */
+        border: 1px solid black;
+        margin: 0 auto;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+      }
+      #game-area {
+        width: 200px;
+        height: 200px;
+        border: 1px solid black;
+        margin: 0 auto;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+      }
+      #timer {
+        font-size: 20px;
+        text-align: center;
+      }
+    </style>
   </head>
-  <body style="text-align: center">
-    <h1>Coming Soon</h1>
-    <p>
-      Game is still in development, we shall notify registered users once its
-      ready.
-    </p>
+  <body>
+    <h1>Flash Thumb Challenge!</h1>
+    <button id="start-button" onclick="startGame()">Start Game</button>
+    <div id="game-area" class="round"></div>
+    <p id="timer"></p>
+    <p id="message"></p>
+    <hr />
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard-list"></ol>
+    <script src="game.js"></script>
   </body>
 </html>
