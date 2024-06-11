@@ -31,22 +31,20 @@ const bot = new Bot(TELEGRAM_BOT_TOKEN);
 
 function telegramWelcomeCommand(bot: Bot) {
   bot.command('start', (ctx) => {
-    ctx.replyWithChatAction('typing');
+    // const message = `Hello, welcome, our bot is live. This is the API URL: ${SITE_LINK}`;
 
-    setTimeout(() => {
-      // const message = `Hello, welcome, our bot is live. This is the API URL: ${SITE_LINK}`;
-
-      // console.log(ctx.from);
-      // ctx.reply(message);
-      ctx.replyWithGame('fastfinger');
-      console.log(ctx.from);
-    }, 5000); // Adjust the timeout duration as needed
+    // console.log(ctx.from);
+    // ctx.reply(message);
+    ctx.replyWithGame('fastfinger');
+    console.log(ctx.from);
   });
 
   bot.on('callback_query:game_short_name', async (ctx) => {
     console.log('Game event button called');
-    
-    await ctx.answerCallbackQuery({ url: 'https://telegram-game-bot-frontend.onrender.com' });
+
+    await ctx.answerCallbackQuery({
+      url: 'https://telegram-game-bot-frontend.onrender.com',
+    });
   });
 
   bot.catch((err) => {
@@ -54,11 +52,11 @@ function telegramWelcomeCommand(bot: Bot) {
     console.error(`Error while handling update ${ctx.update.update_id}:`);
     const e = err.error;
     if (e instanceof GrammyError) {
-      console.error("Error in request:", e.description);
+      console.error('Error in request:', e.description);
     } else if (e instanceof HttpError) {
-      console.error("Could not contact Telegram:", e);
+      console.error('Could not contact Telegram:', e);
     } else {
-      console.error("Unknown error:", e);
+      console.error('Unknown error:', e);
     }
   });
 }
