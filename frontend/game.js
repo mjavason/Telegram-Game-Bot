@@ -43,11 +43,11 @@ function handleGameOver() {
 }
 
 function startGame() {
+  clicks = 0; // Initialize clicks variable
   document.getElementById("trigger-btn").style.display = "none";
   stopBlinking();
   gameArea.addEventListener("click", handleClick);
   message.textContent = "Click as fast as you can!";
-  clicks = 0; // Reset click count
   gameArea.textContent = clicks; // Update displayed click count initially
 
   remainingTime = 30; // Set initial remaining time (seconds)
