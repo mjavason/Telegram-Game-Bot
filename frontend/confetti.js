@@ -1,36 +1,43 @@
-window.ConfettiGenerator = function (e) {
-  function t(e, t) {
-    e || (e = 1);
-    var i = Math.random() * e;
-    return t ? Math.floor(i) : i;
+window.ConfettiGenerator = function (params) {
+  function getRandomValue(max, floor) {
+    max = max || 1;
+    var rand = Math.random() * max;
+    return floor ? Math.floor(rand) : rand;
   }
 
-  function i() {
+  function createConfettiParticle() {
     return {
-      x: t(a.width),
-      y: t(a.height),
-      radius: t(4) + 2,
-      color: a.colors[t(a.colors.length, !0)],
-      speed: t(a.clock / 7) + a.clock / 30,
+      x: getRandomValue(settings.width),
+      y: getRandomValue(settings.height),
+      radius: getRandomValue(4) + 2,
+      color: settings.colors[getRandomValue(settings.colors.length, true)],
+      speed: getRandomValue(settings.clock / 7) + settings.clock / 30,
     };
   }
 
-  function r(e) {
-    var t = e.radius <= 3 ? 0.4 : 0.8;
-    n.fillStyle = "rgba(" + e.color + ", " + t + ")";
-    n.beginPath();
-    n.arc(e.x, e.y, e.radius * a.size, 0, 2 * Math.PI, !0);
-    n.fill();
-    n.lineWidth = 2 * a.size; // Border thickness to resemble a coin
-    n.strokeStyle = "rgba(" + e.color + ", 1)"; // Solid border color
-    n.stroke();
+  function drawConfettiParticle(particle) {
+    var opacity = particle.radius <= 3 ? 0.4 : 0.8;
+    context.fillStyle = "rgba(" + particle.color + ", " + opacity + ")";
+    context.beginPath();
+    context.arc(
+      particle.x,
+      particle.y,
+      particle.radius * settings.size,
+      0,
+      2 * Math.PI,
+      true
+    );
+    context.fill();
+    context.lineWidth = 2 * settings.size;
+    context.strokeStyle = "rgba(" + particle.color + ", 1)";
+    context.stroke();
   }
 
-  var a = {
+  var settings = {
     target: "confetti-holder",
     max: 80,
     size: 1,
-    animate: !0,
+    animate: true,
     colors: [
       [165, 104, 246],
       [230, 61, 135],
@@ -43,51 +50,58 @@ window.ConfettiGenerator = function (e) {
     height: window.innerHeight,
   };
 
-  e &&
-    (e.target && (a.target = e.target),
-    e.max && (a.max = e.max),
-    e.size && (a.size = e.size),
-    void 0 !== e.animate && null !== e.animate && (a.animate = e.animate),
-    e.colors && (a.colors = e.colors),
-    e.clock && (a.clock = e.clock),
-    e.width && (a.width = e.width),
-    e.height && (a.height = e.height));
+  if (params) {
+    Object.keys(params).forEach(function (key) {
+      if (params[key] !== undefined && params[key] !== null) {
+        settings[key] = params[key];
+      }
+    });
+  }
 
-  var o = document.getElementById(a.target),
-    n = o.getContext("2d"),
-    l = [];
+  var canvas = document.getElementById(settings.target);
+  var context = canvas.getContext("2d");
+  var particles = [];
 
   return {
     render: function () {
-      function e() {
-        n.clearRect(0, 0, a.width, a.height);
-        for (var e in l) r(l[e]);
-        s();
+      function animate() {
+        context.clearRect(0, 0, settings.width, settings.height);
+        particles.forEach(function (particle) {
+          drawConfettiParticle(particle);
+        });
+        updateParticles();
       }
 
-      function s() {
-        for (var e = 0; e < a.max; e++) {
-          var i = l[e];
-          a.animate && (i.y += i.speed);
-          i.y > a.height &&
-            ((l[e] = i), (l[e].x = t(a.width, !0)), (l[e].y = -10));
-        }
+      function updateParticles() {
+        particles.forEach(function (particle, index) {
+          if (settings.animate) {
+            particle.y += particle.speed;
+          }
+          if (particle.y > settings.height) {
+            particles[index] = createConfettiParticle();
+            particles[index].x = getRandomValue(settings.width, true);
+            particles[index].y = -10;
+          }
+        });
       }
 
-      o.width = a.width;
-      o.height = a.height;
-      l = [];
-      for (var c = 0; c < a.max; c++) l.push(i());
+      canvas.width = settings.width;
+      canvas.height = settings.height;
+      particles = [];
+      for (var i = 0; i < settings.max; i++) {
+        particles.push(createConfettiParticle());
+      }
 
-      return a.animate ? (a.interval = setInterval(e, 20)) : e();
+      if (settings.animate) {
+        settings.interval = setInterval(animate, 20);
+      } else {
+        animate();
+      }
     },
 
     clear: function () {
-      n.clearRect(0, 0, o.width, o.height);
-      var e = o.width;
-      o.width = 1;
-      o.width = e;
-      clearInterval(a.interval);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      clearInterval(settings.interval);
     },
   };
 };
