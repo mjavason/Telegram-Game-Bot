@@ -3,6 +3,7 @@ const message = document.getElementById('message');
 const timerElement = document.getElementById('timer');
 const blinkInterval = 500; // Blinking interval in milliseconds
 let blinkIntervalId;
+handleMissingUsername();
 
 // Initial state variables
 let isVisible = true;
@@ -17,14 +18,18 @@ function getUsernameFromUrl() {
 // Function to check for missing username and redirect if needed
 function handleMissingUsername() {
   const username = getUsernameFromUrl();
-  if (!username) {
-    window.location = 'error.html';
-  }
+  if (!username) window.location = 'error.html';
 }
 
 function handleClick() {
   clicks++;
   gameArea.textContent = clicks; // Update displayed click count
+
+  // Add animation styles for swelling on click
+  gameArea.classList.add('swell');
+  setTimeout(() => {
+    gameArea.classList.remove('swell');
+  }, 200); // Remove animation class after 200ms (adjust duration as needed)
 }
 
 function handleGameOver() {
@@ -64,13 +69,16 @@ function updateTimer() {
 async function uploadScore(score) {
   // Replace with your actual API URL and logic
   try {
-    const response = await fetch('http://localhost:5000/new-score', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username: getUsernameFromUrl(), clicks: score }),
-    });
+    const response = await fetch(
+      'https://telegram-game-bot-tbdr.onrender.com/new-score',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: getUsernameFromUrl(), clicks: score }),
+      }
+    );
     const data = await response.json();
     console.log('Score uploaded:', data);
     updateLeaderBoard();
@@ -85,7 +93,9 @@ async function updateLeaderBoard() {
   const leaderboardList = document.getElementById('leaderboard-list');
 
   try {
-    const response = await fetch('http://localhost:5000/leaderboard');
+    const response = await fetch(
+      'https://telegram-game-bot-tbdr.onrender.com/leaderboard'
+    );
     const data = await response.json();
 
     // Clear any existing list items
