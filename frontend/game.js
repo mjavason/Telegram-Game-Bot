@@ -72,6 +72,7 @@ async function uploadScore(score) {
   try {
     const response = await fetch(
       'https://telegram-game-bot-tbdr.onrender.com/new-score',
+      // 'http://localhost:5000/new-score',
       {
         method: 'POST',
         headers: {
@@ -96,6 +97,7 @@ async function updateLeaderBoard() {
   try {
     const response = await fetch(
       'https://telegram-game-bot-tbdr.onrender.com/leaderboard'
+      // 'http://localhost:5000/leaderboard',
     );
     const data = await response.json();
 

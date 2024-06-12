@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { Bot, GrammyError, HttpError } from 'grammy';
+import mongoose, { Schema, model } from 'mongoose';
 import 'express-async-errors';
 import cors from 'cors';
 import axios from 'axios';
@@ -18,8 +19,22 @@ const PORT = process.env.PORT || 3000;
 const baseURL = 'https://httpbin.org';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'xxxx';
 // const SITE_LINK = process.env.SITE_LINK || 'xxxx';
+const DB_NAME = process.env.MONGO_DB_NAME || 'flashthumb';
+const DB_CONNECTION_STRING =
+  process.env.MONGO_DB_URL + DB_NAME || 'mongodb://localhost:27017/' + DB_NAME;
 const bot = new Bot(TELEGRAM_BOT_TOKEN);
-let leaderboard: [{ username: string; clicks: number }] | any = [];
+const ScoreModel = model(
+  'scores',
+  new Schema(
+    {
+      username: { type: String, required: true },
+      clicks: { type: Number, required: true },
+    },
+    {
+      timestamps: true,
+    }
+  )
+);
 //#endregion
 
 // const getUsername = (ctx: Context): string => {
@@ -70,24 +85,26 @@ async function startBot() {
 }
 
 //get complete top 10 leaderboard
-app.get('/leaderboard', (req: Request, res: Response) => {
-  return res.send(sortLeaderboard());
+app.get('/leaderboard', async (req: Request, res: Response) => {
+  const scores = await ScoreModel.find().sort({ clicks: 'desc' });
+  return res.send(scores);
 });
 
-app.post('/new-score', (req: Request, res: Response) => {
+app.post('/new-score', async (req: Request, res: Response) => {
   console.log('req.body', req.body);
+  const leaderboard = await ScoreModel.find().sort({ clicks: 'desc' });
   for (let i = 0; i < leaderboard.length; i++) {
     if (leaderboard[i].username == req.body.username) {
-      if (leaderboard[i].clicks < req.body.clicks) leaderboard[i] = req.body;
+      if (leaderboard[i].clicks <= req.body.clicks) leaderboard[i] = req.body;
       return res.send({
         success: true,
-        message: 'Score updated successfully',
+        message: 'Score is not best',
         data: leaderboard[i],
       });
     }
   }
 
-  leaderboard.push(req.body);
+  await ScoreModel.create(req.body);
   return res.send({
     success: true,
     message: 'Score updated successfully',
@@ -95,15 +112,6 @@ app.post('/new-score', (req: Request, res: Response) => {
   });
 });
 
-function sortLeaderboard() {
-  // Sort function for descending order
-  const sortByClicks = (a: { clicks: number }, b: { clicks: number }) =>
-    b.clicks - a.clicks;
-
-  // Sort the players array by score
-  const sortedPlayers = leaderboard.sort(sortByClicks);
-  return sortedPlayers;
-}
 //#region Server setup
 async function pingSelf() {
   try {
@@ -117,6 +125,20 @@ async function pingSelf() {
     console.log(`this the error message: ${e.message}`);
     return;
   }
+}
+
+async function connectToDatabase(connectionString = DB_CONNECTION_STRING) {
+  // console.log('Trying to connect to', DB_CONNECTION_STRING);
+  await mongoose.connect(connectionString, {
+    autoIndex: false, // Don't build indexes
+    maxPoolSize: 10, // Maintain up to 10 socket connections
+    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS: 50000, // Close sockets after 45 seconds of inactivity
+    family: 4, // Use IPv4, skip trying IPv6
+  });
+
+  console.log('Connected to database');
+  return true;
 }
 
 // default message
@@ -137,6 +159,7 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   startBot();
+  await connectToDatabase();
 });
 
 // (for render services) Keep the API awake by pinging it periodically
