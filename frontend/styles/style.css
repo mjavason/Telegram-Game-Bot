@@ -8,6 +8,7 @@ body {
   background: #0c111d;
   overflow: hidden;
   color: white;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 /* Your existing CSS styles */
@@ -92,7 +93,7 @@ body {
   display: block;
   font-weight: 900;
   overflow: hidden;
-  padding: 20px 60px;
+  padding: 20px 40px;
   position: relative;
   text-transform: uppercase;
   -webkit-animation: flash 0.8s;

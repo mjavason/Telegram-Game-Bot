@@ -17,10 +17,10 @@ function getUsernameFromUrl() {
 }
 
 // Function to check for missing username and redirect if needed
-// function handleMissingUsername() {
-//   const username = getUsernameFromUrl();
-//   if (!username) window.location = "error.html";
-// }
+function handleMissingUsername() {
+  const username = getUsernameFromUrl();
+  if (!username) window.location = "error.html";
+}
 
 function handleClick() {
   clicks++;
@@ -49,7 +49,7 @@ function startGame() {
   document.getElementById("trigger-btn").style.display = "none";
   stopBlinking();
   gameArea.addEventListener("click", handleClick);
-  message.textContent = "Click as fast as you can!";
+  message.textContent = "Tap as fast as you can!";
   clicks = 0; // Reset click count
   gameArea.textContent = clicks; // Update displayed click count initially
 
