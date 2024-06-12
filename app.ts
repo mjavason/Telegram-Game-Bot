@@ -111,9 +111,7 @@ async function pingSelf() {
       `https://telegram-game-bot-tbdr.onrender.com`
     );
 
-    console.log(
-      `Server pinged successfully: ${data.message}`
-    );
+    console.log(`Server pinged successfully: ${data.message}`);
     return true;
   } catch (e: any) {
     console.log(`this the error message: ${e.message}`);
