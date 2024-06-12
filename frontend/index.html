@@ -31,6 +31,11 @@
         background-image: url("https://res.cloudinary.com/dtfvdjvyr/image/upload/v1718192366/amico_jpxolx.png");
         background-size: cover; /* Ensures the image covers the entire div */
         background-position: center; /* Centers the image within the div */
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .click-effect {
+        transform: scale(0.95); /* Shrinks the game area slightly */
       }
       .game-area.swell {
         transform: scale(1.1); /* Increase size by 10% on click */
@@ -59,6 +64,10 @@
         font-size: 16px;
         border-radius: 8px;
         cursor: pointer;
+      }
+      .hide {
+        transform: scale(0.5); /* Scale down */
+        opacity: 0; /* Fade out */
       }
     </style>
   </head>
