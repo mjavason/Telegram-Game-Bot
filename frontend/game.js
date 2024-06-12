@@ -17,10 +17,10 @@ function getUsernameFromUrl() {
 }
 
 // Function to check for missing username and redirect if needed
-// function handleMissingUsername() {
-//   const username = getUsernameFromUrl();
-//   if (!username) window.location = "error.html";
-// }
+function handleMissingUsername() {
+  const username = getUsernameFromUrl();
+  if (!username) window.location = "error.html";
+}
 
 function handleClick() {
   clicks++;
