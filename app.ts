@@ -105,6 +105,21 @@ function sortLeaderboard() {
   return sortedPlayers;
 }
 //#region Server setup
+async function pingSelf() {
+  try {
+    const { data } = await axios.get(
+      `https://telegram-game-bot-tbdr.onrender.com`
+    );
+
+    console.log(
+      `Server pinged successfully: ${data.message}`
+    );
+    return true;
+  } catch (e: any) {
+    console.log(`this the error message: ${e.message}`);
+    return;
+  }
+}
 
 // default message
 app.get('/api', async (req: Request, res: Response) => {
@@ -125,6 +140,9 @@ app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   startBot();
 });
+
+// (for render services) Keep the API awake by pinging it periodically
+setInterval(pingSelf, 600000);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   // throw Error('This is a sample error');
