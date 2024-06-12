@@ -26,11 +26,12 @@ function handleClick() {
   clicks++;
   gameArea.textContent = clicks; // Update displayed click count
   gameArea.classList.add("click-effect");
-  // Add animation styles for swelling on click
-  gameArea.classList.add("swell");
   setTimeout(() => {
     gameArea.classList.remove("click-effect");
-  }, 100); // Match the transition duration
+  }, 100);
+  // Add animation styles for swelling on click
+  gameArea.classList.add("swell");
+  // Match the transition duration
   setTimeout(() => {
     gameArea.classList.remove("swell");
   }, 200); // Remove animation class after 200ms (adjust duration as needed)
