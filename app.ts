@@ -57,9 +57,10 @@ function telegramWelcomeCommand(bot: Bot) {
 
   bot.on('callback_query:game_short_name', async (ctx) => {
     console.log('Game event button called');
+    const usernameCtx = ctx.from.username ?? `${ctx.from.first_name}${ctx.from.id}`;
 
     await ctx.answerCallbackQuery({
-      url: `https://telegram-game-bot-frontend.onrender.com?username=${ctx.from.username}`,
+      url: `https://telegram-game-bot-frontend.onrender.com?username=${usernameCtx}`,
     });
   });
 
