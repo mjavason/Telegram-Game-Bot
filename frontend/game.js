@@ -11,10 +11,10 @@ let isVisible = true;
 let clicks = 0;
 
 // Function to retrieve username from URL (optional error handling)
-// function getUsernameFromUrl() {
-//   const urlParams = new URLSearchParams(window.location.search);
-//   return urlParams.get("username") || ""; // Return empty string if username not found
-// }
+function getUsernameFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("username") || ""; // Return empty string if username not found
+}
 
 // Function to check for missing username and redirect if needed
 function handleMissingUsername() {
