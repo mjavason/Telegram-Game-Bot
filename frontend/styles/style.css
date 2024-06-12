@@ -9,3 +9,43 @@ body {
   overflow: hidden;
   color: white;
 }
+
+/* Your existing CSS styles */
+
+/* Flash animation */
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Hide animation */
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+/* Apply flash animation to the heading */
+#flash-heading.flash {
+  animation: flash 1s linear;
+}
+
+/* Apply hide animation to the heading */
+#flash-heading.hide {
+  animation: hide 1s linear forwards;
+}
+
+#flash-heading {
+  font-family: "Your Font", sans-serif; /* Replace 'Your Font' with your desired font name */
+}

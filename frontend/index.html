@@ -21,7 +21,11 @@
       #game-area {
         width: 200px;
         height: 200px;
-
+        position: relative;
+        top: 100px;
+        bottom: 0%;
+        left: 0%;
+        right: 0%;
         margin: auto;
         cursor: pointer;
         display: flex;
@@ -55,7 +59,7 @@
       }
       #trigger-btn {
         position: absolute;
-        top: 50%;
+        top: 70%;
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 10px 20px;
@@ -73,9 +77,11 @@
   </head>
   <body>
     <canvas id="confetti-holder"></canvas>
-    <h1>Flash Thumb Challenge!</h1>
-    <button id="trigger-btn" onclick="startGame()">Start Game</button>
 
+    <button id="trigger-btn" onclick="startGame()">Start Game</button>
+    <center>
+      <h1 id="flash-heading">Flash Thumb Challenge!</h1>
+    </center>
     <div id="game-area" class="round"></div>
     <p id="timer"></p>
     <p id="message"></p>
@@ -85,6 +91,24 @@
     <script src="game.js"></script>
     <script src="confetti.js"></script>
     <script>
+      document
+        .getElementById("trigger-btn")
+        .addEventListener("click", function () {
+          var confetti = new window.ConfettiGenerator({
+            target: "confetti-holder",
+          });
+          confetti.render();
+        });
+      window.onload = function () {
+        // Flash heading on load
+        document.getElementById("flash-heading").classList.add("flash");
+        // Hide heading after flash animation
+        setTimeout(function () {
+          document.getElementById("flash-heading").classList.add("hide");
+        }, 1000); // Adjust the delay (in milliseconds) as needed
+      };
+      // Rest of your JavaScript code
+      // Make sure you have the startGame function defined properly in game.js
       document
         .getElementById("trigger-btn")
         .addEventListener("click", function () {
