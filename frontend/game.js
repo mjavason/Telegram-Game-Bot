@@ -4,6 +4,7 @@ const timerElement = document.getElementById('timer');
 const blinkInterval = 500; // Blinking interval in milliseconds
 let blinkIntervalId;
 handleMissingUsername();
+updateLeaderBoard();
 
 // Initial state variables
 let isVisible = true;
