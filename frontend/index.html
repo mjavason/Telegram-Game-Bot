@@ -3,19 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles/style.css" media="all" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      integrity="sha512-Fo3rlrZj/kMVqclZZYAHVRPpY6E4JkM1VrP5GFygWfsJtVgtp3dSMTx6Ap+PZgxV+2kQ5/RR7N6Q/zt8QEXE1w=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-    />
-
     <title>Flash Thumb Challenge!</title>
     <style>
       .round {
@@ -30,134 +17,36 @@
         align-items: center;
         font-size: 50px;
       }
-      #Leaderboard {
-        position: absolute;
-        right: 0%;
-        top: 80%;
-        left: 0%;
-        margin: 0 auto;
-      }
       #game-area {
         width: 200px;
         height: 200px;
-        position: relative;
-        top: 100px;
-        bottom: 0%;
-        left: 0%;
-        right: 0%;
-        margin: auto;
+        border: 1px solid black;
+        margin: 0 auto;
         cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 50px;
-        background-image: url("https://res.cloudinary.com/dtfvdjvyr/image/upload/v1718192366/amico_jpxolx.png");
-        background-size: cover; /* Ensures the image covers the entire div */
-        background-position: center; /* Centers the image within the div */
-        transition: transform 0.1s ease-in-out;
-      }
-
-      .click-effect {
-        transform: scale(0.95); /* Shrinks the game area slightly */
       }
       .game-area.swell {
         transform: scale(1.1); /* Increase size by 10% on click */
         transition: transform 0.2s ease-in-out; /* Animation for smooth transition */
       }
       #timer {
-        font-size: 24px;
+        font-size: 20px;
         text-align: center;
-        color: #fff; /* A bright, fun color */
-        font-weight: bold;
-        font-family: "Comic Sans MS", "Comic Sans"; /* A playful font */
-        padding: 20px;
-        position: absolute;
-        right: 0%;
-        top: 50%;
-        left: 0%;
-        border-radius: 10px; /* Rounded corners for a softer look */
-        background: #223152; /* White background for contrast */
-        width: 200px;
-        margin: 0 auto; /* Center the timer */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-        transition: transform 0.2s; /* Smooth scaling transition */
-      }
-      #timer-container {
-        text-align: center;
-        margin-top: 20px;
-      }
-      #confetti-holder {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none; /* Ensures the canvas doesn't block button clicks */
-      }
-      #trigger-btn {
-        position: absolute;
-        top: 70%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-      .hide {
-        transform: scale(0.5); /* Scale down */
-        opacity: 0; /* Fade out */
       }
     </style>
   </head>
   <body>
-    <canvas id="confetti-holder"></canvas>
-
-    <button id="trigger-btn" class="btn-65" onclick="startGame()">Start</button>
-    <center>
-      <p id="message">GO!</p>
-    </center>
+    <h1>Flash Thumb Challenge!</h1>
+    <button id="start-button" onclick="startGame()">Start Game</button>
     <div id="game-area" class="round"></div>
-    <div id="timer-container">
-      <p id="timer"></p>
-    </div>
+    <p id="timer"></p>
     <p id="message"></p>
-
-    <a id="icon-link" href="https://example.com">
-      <i class="fas fa-arrow-right"></i>
-    </a>
-    <center>
-      <div id="Leaderboard">
-        <h2>Leaderboard</h2>
-        <ol id="leaderboard-list"></ol>
-      </div>
-    </center>
-
+    <hr />
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard-list"></ol>
     <script src="game.js"></script>
-    <script src="confetti.js"></script>
-    <script>
-      document
-        .getElementById("trigger-btn")
-        .addEventListener("click", function () {
-          var confetti = new window.ConfettiGenerator({
-            target: "confetti-holder",
-          });
-          confetti.render();
-        });
-      window.onload = function () {
-        // Flash heading on load
-        document.getElementById("flash-heading").classList.add("flash");
-        // Hide heading after flash animation
-        setTimeout(function () {
-          document.getElementById("flash-heading").classList.add("hide");
-        }, 1000); // Adjust the delay (in milliseconds) as needed
-      };
-      // Rest of your JavaScript code
-      // Make sure you have the startGame function defined properly in game.js
-      document
-        .getElementById("trigger-btn")
-        .addEventListener("click", function () {
-          var confetti = new window.ConfettiGenerator({
-            target: "confetti-holder",
-          });
-          confetti.render();
-        });
-    </script>
   </body>
 </html>
