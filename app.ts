@@ -57,7 +57,8 @@ function telegramWelcomeCommand(bot: Bot) {
 
   bot.on('callback_query:game_short_name', async (ctx) => {
     console.log('Game event button called');
-    const usernameCtx = ctx.from.username ?? `${ctx.from.first_name}${ctx.from.id}`;
+    const usernameCtx =
+      ctx.from.username ?? `${ctx.from.first_name}${ctx.from.id}`;
 
     await ctx.answerCallbackQuery({
       url: `https://telegram-game-bot-frontend.onrender.com?username=${usernameCtx}`,
@@ -96,7 +97,18 @@ app.post('/new-score', async (req: Request, res: Response) => {
   const leaderboard = await ScoreModel.find().sort({ clicks: 'desc' });
   for (let i = 0; i < leaderboard.length; i++) {
     if (leaderboard[i].username == req.body.username) {
-      if (leaderboard[i].clicks <= req.body.clicks) leaderboard[i] = req.body;
+      if (leaderboard[i].clicks <= req.body.clicks) {
+        await ScoreModel.findOneAndUpdate(
+          { username: req.body.username },
+          { clicks: req.body.clicks }
+        );
+
+        return res.send({
+          success: true,
+          message: 'Score updated successfully',
+          data: req.body,
+        });
+      }
       return res.send({
         success: true,
         message: 'Score is not best',
